@@ -58,11 +58,15 @@ function VerifyPage() {
         <Card className="p-8">
           {!verified ? (
             <>
-              <h2 className="text-xl font-semibold mb-6">Valide seu nome de usuário</h2>
+              <h2 className="text-xl font-semibold mb-6">Valide sua chave de acesso</h2>
               <form onSubmit={onSubmit} className="space-y-4">
                 <div>
                   <Label htmlFor="u">Nome de Usuário</Label>
                   <Input id="u" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="seu-usuario" autoFocus disabled={busy} className="mt-2" />
+                </div>
+                <div>
+                  <Label htmlFor="c">Chave</Label>
+                  <Input id="c" value={code} onChange={(e) => setCode(e.target.value)} placeholder="XXXX-XXXX-XXXX-XXXX" disabled={busy} className="mt-2 font-mono" />
                 </div>
                 <Button type="submit" disabled={busy} className="w-full">{busy ? "Verificando..." : "Verificar Chave"}</Button>
               </form>
