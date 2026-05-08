@@ -13,6 +13,7 @@ import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiValidateKeyRouteImport } from './routes/api/validate-key'
 
 const VerifyRoute = VerifyRouteImport.update({
   id: '/verify',
@@ -34,18 +35,25 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiValidateKeyRoute = ApiValidateKeyRouteImport.update({
+  id: '/api/validate-key',
+  path: '/api/validate-key',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/verify': typeof VerifyRoute
+  '/api/validate-key': typeof ApiValidateKeyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/verify': typeof VerifyRoute
+  '/api/validate-key': typeof ApiValidateKeyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,14 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/verify': typeof VerifyRoute
+  '/api/validate-key': typeof ApiValidateKeyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin' | '/auth' | '/verify'
+  fullPaths: '/' | '/admin' | '/auth' | '/verify' | '/api/validate-key'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin' | '/auth' | '/verify'
-  id: '__root__' | '/' | '/admin' | '/auth' | '/verify'
+  to: '/' | '/admin' | '/auth' | '/verify' | '/api/validate-key'
+  id: '__root__' | '/' | '/admin' | '/auth' | '/verify' | '/api/validate-key'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +76,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   VerifyRoute: typeof VerifyRoute
+  ApiValidateKeyRoute: typeof ApiValidateKeyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/validate-key': {
+      id: '/api/validate-key'
+      path: '/api/validate-key'
+      fullPath: '/api/validate-key'
+      preLoaderRoute: typeof ApiValidateKeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   VerifyRoute: VerifyRoute,
+  ApiValidateKeyRoute: ApiValidateKeyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
