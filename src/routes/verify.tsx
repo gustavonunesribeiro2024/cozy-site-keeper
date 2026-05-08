@@ -23,16 +23,17 @@ function VerifyPage() {
   const verify = useServerFn(verifyKeyByUsername);
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
+  const [code, setCode] = useState("");
   const [verified, setVerified] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!username.trim()) return setError("Digite um nome de usuário");
+    if (!username.trim() || !code.trim()) return setError("Digite o nome de usuário e a chave");
     setBusy(true); setError("");
     try {
-      const res = await verify({ data: { username: username.trim() } });
+      const res = await verify({ data: { username: username.trim(), code: code.trim() } });
       setVerified(res.username);
       toast.success("Chave válida! Acesso concedido.");
       setTimeout(() => navigate({ to: "/" }), 2200);
