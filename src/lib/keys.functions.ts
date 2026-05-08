@@ -91,17 +91,31 @@ export const deleteKey = createServerFn({ method: "POST" })
   });
 
 export const verifyKeyByUsername = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ username: z.string().min(1) }))
+  .inputValidator(
+    z.object({
+      username: z.string().trim().min(1).max(64),
+      code: z.string().trim().min(1).max(64),
+    })
+  )
   .handler(async ({ data }) => {
+    const GENERIC_ERROR = "Verificação falhou: usuário ou chave inválidos";
     const { data: key, error } = await supabaseAdmin
-      .from("keys").select("*").eq("username", data.username).maybeSingle();
-    if (error) throw new Error(error.message);
-    if (!key) throw new Error("Chave não encontrada");
-    if (key.status === "pausada") throw new Error("Chave pausada");
-    if (key.status === "expirada") throw new Error("Chave expirada");
+      .from("keys")
+      .select("*")
+      .eq("username", data.username)
+      .maybeSingle();
+    if (error) {
+      console.error("[verifyKeyByUsername]", error.message);
+      throw new Error(GENERIC_ERROR);
+    }
+    if (!key) throw new Error(GENERIC_ERROR);
+    // Constant-time-ish code comparison
+    if (key.code !== data.code) throw new Error(GENERIC_ERROR);
+    if (key.status === "pausada") throw new Error(GENERIC_ERROR);
+    if (key.status === "expirada") throw new Error(GENERIC_ERROR);
     if (key.expires_at && new Date(key.expires_at) < new Date()) {
       await supabaseAdmin.from("keys").update({ status: "expirada" }).eq("id", key.id);
-      throw new Error("Chave expirada");
+      throw new Error(GENERIC_ERROR);
     }
     return { valid: true, username: key.username };
   });
