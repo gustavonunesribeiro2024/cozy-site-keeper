@@ -45,7 +45,7 @@ function AdminPage() {
   });
 
   const createMut = useMutation({
-    mutationFn: (data: { username: string; expirationDays: "1"|"7"|"30"|"vitalicio" }) => create({ data }),
+    mutationFn: (data: { username: string; expirationDays: "1"|"7"|"30"|"90"|"vitalicio" }) => create({ data }),
     onSuccess: (r) => { setLastCode(r.code); toast.success("Chave criada!"); qc.invalidateQueries({ queryKey: ["keys"] }); },
     onError: (e: Error) => toast.error(e.message),
   });
