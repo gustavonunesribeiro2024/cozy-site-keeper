@@ -40,7 +40,7 @@ export const createKey = createServerFn({ method: "POST" })
   .inputValidator(
     z.object({
       username: z.string().min(1),
-      expirationDays: z.enum(["1", "7", "30", "vitalicio"]),
+      expirationDays: z.enum(["1", "7", "30", "90", "vitalicio"]),
     })
   )
   .handler(async ({ context, data }) => {
