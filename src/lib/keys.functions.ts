@@ -108,9 +108,16 @@ export const verifyKeyByUsername = createServerFn({ method: "POST" })
       console.error("[verifyKeyByUsername]", error.message);
       throw new Error(GENERIC_ERROR);
     }
-    if (!key) throw new Error(GENERIC_ERROR);
-    // Constant-time-ish code comparison
-    if (key.code !== data.code) throw new Error(GENERIC_ERROR);
+    // Always perform a constant-time comparison against a buffer of equal length
+    // to avoid timing-based username enumeration (compare even when key is null).
+    const enc = new TextEncoder();
+    const provided = enc.encode(data.code);
+    const expected = enc.encode(key?.code ?? "");
+    const sameLength = provided.length === expected.length;
+    const buf = sameLength ? expected : new Uint8Array(provided.length);
+    let diff = sameLength ? 0 : 1;
+    for (let i = 0; i < provided.length; i++) diff |= provided[i] ^ buf[i];
+    if (!key || diff !== 0) throw new Error(GENERIC_ERROR);
     if (key.status === "pausada") throw new Error(GENERIC_ERROR);
     if (key.status === "expirada") throw new Error(GENERIC_ERROR);
     if (key.expires_at && new Date(key.expires_at) < new Date()) {
