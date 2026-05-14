@@ -117,6 +117,7 @@ function AdminPage() {
                   <SelectItem value="1">1 Dia</SelectItem>
                   <SelectItem value="7">7 Dias</SelectItem>
                   <SelectItem value="30">30 Dias</SelectItem>
+                  <SelectItem value="90">3 Meses</SelectItem>
                   <SelectItem value="vitalicio">Vitalício</SelectItem>
                 </SelectContent>
               </Select>
