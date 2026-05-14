@@ -61,7 +61,7 @@ function AdminPage() {
   });
 
   const [username, setUsername] = useState("");
-  const [exp, setExp] = useState<"1"|"7"|"30"|"vitalicio">("7");
+  const [exp, setExp] = useState<"1"|"7"|"30"|"90"|"vitalicio">("7");
   const [lastCode, setLastCode] = useState<string | null>(null);
   const [confirmDel, setConfirmDel] = useState<string | null>(null);
 
