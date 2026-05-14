@@ -45,7 +45,7 @@ function AdminPage() {
   });
 
   const createMut = useMutation({
-    mutationFn: (data: { username: string; expirationDays: "1"|"7"|"30"|"vitalicio" }) => create({ data }),
+    mutationFn: (data: { username: string; expirationDays: "1"|"7"|"30"|"90"|"vitalicio" }) => create({ data }),
     onSuccess: (r) => { setLastCode(r.code); toast.success("Chave criada!"); qc.invalidateQueries({ queryKey: ["keys"] }); },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -61,7 +61,7 @@ function AdminPage() {
   });
 
   const [username, setUsername] = useState("");
-  const [exp, setExp] = useState<"1"|"7"|"30"|"vitalicio">("7");
+  const [exp, setExp] = useState<"1"|"7"|"30"|"90"|"vitalicio">("7");
   const [lastCode, setLastCode] = useState<string | null>(null);
   const [confirmDel, setConfirmDel] = useState<string | null>(null);
 
@@ -117,6 +117,7 @@ function AdminPage() {
                   <SelectItem value="1">1 Dia</SelectItem>
                   <SelectItem value="7">7 Dias</SelectItem>
                   <SelectItem value="30">30 Dias</SelectItem>
+                  <SelectItem value="90">3 Meses</SelectItem>
                   <SelectItem value="vitalicio">Vitalício</SelectItem>
                 </SelectContent>
               </Select>
